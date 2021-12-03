@@ -42,8 +42,8 @@ public class CustomerResource {
     }
 
     @POST
-    public void create(CustomerDto customerDto) {
-        customerService.create(customerDto);
+    public CustomerDto create(CustomerDto customerDto) {
+        return customerService.create(customerDto);
     }
 
     @DELETE

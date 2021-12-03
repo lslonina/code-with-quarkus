@@ -12,6 +12,7 @@ import org.lslonina.shop.entity.Cart;
 import org.lslonina.shop.entity.CartStatus;
 import org.lslonina.shop.repository.CartRepository;
 import org.lslonina.shop.repository.CustomerRepository;
+import org.lslonina.shop.utils.InvalidDataException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,11 +40,11 @@ public class CartService {
 
     public Cart create(Long customerId) {
         if (getActiveCart(customerId) != null) {
-            throw new IllegalStateException("There is already an active cart!");
+            throw new InvalidDataException("There is already an active cart!");
         }
 
         var customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new IllegalStateException("The customer does not exist!"));
+                .orElseThrow(() -> new InvalidDataException("The customer does not exist!"));
         var cart = new Cart(customer, CartStatus.NEW);
 
         return cartRepository.save(cart);
@@ -71,13 +72,13 @@ public class CartService {
     }
 
     public CartDto getActiveCart(Long customerId) {
-        var carts = this.cartRepository.findByStatusAndCustomerId(CartStatus.NEW, customerId);
+        var carts = cartRepository.findByStatusAndCustomerId(CartStatus.NEW, customerId);
 
         if (carts == null || carts.isEmpty()) {
             return null;
         }
         if (carts.size() > 1) {
-            throw new IllegalStateException("Many active carts detected!");
+            throw new InvalidDataException("Many active carts detected!");
         }
         return mapToDto(carts.get(0));
     }

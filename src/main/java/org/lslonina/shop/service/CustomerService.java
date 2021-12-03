@@ -25,13 +25,12 @@ public class CustomerService {
     public CustomerDto create(CustomerDto customerDto) {
         log.debug("Request to create Customer: {}", customerDto);
 
-        return mapToDto(customerRepository.save(new Customer(
-                customerDto.getFirstName(),
-                customerDto.getLastName(),
-                customerDto.getTelephone(),
-                customerDto.getEmail(),
-                Collections.emptySet(),
-                Boolean.TRUE)));
+        Customer customer = customerRepository.save(new Customer(
+                customerDto.getFirstName(), customerDto.getLastName(),
+                customerDto.getTelephone(), customerDto.getEmail(),
+                Collections.emptySet(), Boolean.TRUE));
+        
+        return mapToDto(customer);
     }
 
     public List<CustomerDto> findAll() {

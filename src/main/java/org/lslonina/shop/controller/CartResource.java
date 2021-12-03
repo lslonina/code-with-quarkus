@@ -14,9 +14,14 @@ import org.lslonina.shop.service.CartService;
 
 @Path("/carts")
 public class CartResource {
-    
+
     @Inject
     CartService cartService;
+
+    @GET
+    public List<CartDto> findAll() {
+        return cartService.findAll();
+    }
 
     @GET
     @Path("/active")
